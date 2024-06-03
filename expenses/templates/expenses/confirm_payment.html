@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Payment</title>
+</head>
+<body>
+    <h1>Confirm Payment</h1>
+    <p>Dear {{ user.username }},</p>
+    <p>You have already spent {{ total_spent_today }} today. If you proceed with this payment of ${{ amount }}, your total spending today will exceed your daily limit of ${{ user.daily_spending_limit }}.</p>
+    <form action="{% url 'process_payment' payment_id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="confirm_payment" value="true">
+        <input type="submit" value="Confirm Payment">
+    </form>
+    <form action="{% url 'initiate_payment' %}" method="get">
+        <input type="submit" value="Cancel">
+    </form>
+</body>
+</html>

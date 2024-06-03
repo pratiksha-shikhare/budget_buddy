@@ -1,28 +1,7 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Initiate Payment</title>
-</head>
-<body>
-    <h1>Initiate Payment</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" step="0.01" required><br><br>
-        <button type="submit">Pay Now</button>
-    </form>
-</body>
-</html -->
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Initiate Payment</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -53,20 +32,93 @@
         <form method="post" action="{% url 'initiate_payment' %}">
             {% csrf_token %}
             <p class="text-danger">{{error}}</p>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" class="form-control" id="email" name="email" required>
+            </div> -->
+            <div class="form-group">
+                <label for="number">Daily max spending amount:</label>
+                <input type="number" class="form-control" id="email" name="daily_limit" value='1000' required>
             </div>
             <div class="form-group">
-                <label for="amount">Amount:</label>
+                <label for="amount">Pay amount (Rup):</label>
                 <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
             </div>
             <button type="submit" class="btn btn-primary">Pay Now</button>
         </form>
     </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Your Common Monthly Expense</h3>
+                        {% for e in exp %}
+                          <p>{{e.description}} : {{e.amount}}</p>
+                        {% endfor %}
+                        <p><b>Total : {{total_monthly_exp}}</b></p>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'add_common_expense' %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-info btn-block">Add New Expense</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h2>Usable Balance</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead">Your usable balance excluding common expenses is <strong>Rup :{{ usable_balance }}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiate Payment</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <h1>Initiate Payment</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email">
+        <label for="daily_limit">Daily Limit:</label>
+        <input type="number" name="daily_limit" id="daily_limit">
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" id="amount">
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Add Common Expense</h2>
+    <form method="post" action="{% url 'add_common_expense' %}">
+        {% csrf_token %}
+        {{ common_expense_form.as_p }}
+        <button type="submit">Add Expense</button>
+    </form>
+    <h2>Usable Balance</h2>
+    <p>Your usable balance excluding common expenses is ${{ usable_balance }}</p>
+</body>
+</html> -->
