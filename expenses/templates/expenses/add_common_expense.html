@@ -4,16 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Common Expense</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #007bff;
+        }
+        .form-control {
+            padding-left: 40px;
+        }
+        .btn-primary {
+            width: 100%;
+            background-color: #007bff;
+            border: none;
+            font-weight: bold;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .text-danger {
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Add Common Expense</h1>
-    <form method="post" action="{% url 'add_common_expense' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add Expense</button>
-    </form>
+    <div class="container">
+        <h3 class="form-title">Add Common Expense</h3>
+        <form method="post" action="{% url 'add_common_expense' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_user"><i class="fas fa-user"></i> User</label>
+                {{ form.user }}
+                {% if form.user.errors %}
+                    <div class="text-danger">{{ form.user.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_amount"><i class="fas fa-money-bill-wave"></i> Amount</label>
+                {{ form.amount }}
+                {% if form.amount.errors %}
+                    <div class="text-danger">{{ form.amount.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_description"><i class="fas fa-align-left"></i> Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-danger">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </body>
 </html> -->
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Common Expense</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .btn-primary {
+            width: 100%;
+            background-color: #007bff;
+            border: none;
+            font-weight: bold;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="home-arrow">
+            <a href="{% url 'landing' %}">&#8592; Back to Home</a>
+        </div>
+        <h3 class="form-title">Add Common Expense</h3>
+        <form method="post" action="{% url 'add_common_expense' %}">
+            {% csrf_token %}
+            <div class="form-group">
+            </div>
+            <div class="form-group">
+                <label for="id_amount">Amount:</label>
+                <input type="number" class="form-control" id="id_amount" name="amount" required>
+            </div>
+            <div class="form-group">
+                <label for="id_description">Description:</label>
+                <input type="text" class="form-control" id="id_description" name="description" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+    </div>
+</body>
+</html> -->
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,12 +170,13 @@
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
         }
         .container {
             max-width: 500px;
             margin-top: 50px;
-            background-color: #ffffff;
             padding: 30px;
+            background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
@@ -40,36 +186,46 @@
             font-weight: bold;
             color: #007bff;
         }
+        .form-group label {
+            font-weight: bold;
+            color: #495057;
+        }
         .btn-primary {
             width: 100%;
+            background-color: #007bff;
+            border: none;
+            font-weight: bold;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .home-icon {
+            text-align: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="home-icon">
+            <a href="{% url 'landing' %}"><i class="fas fa-home"></i></a>
+        </div>
         <h3 class="form-title">Add Common Expense</h3>
         <form method="post" action="{% url 'add_common_expense' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="id_user">User</label>
-                {{ form.user }}
-                {% if form.user.errors %}
-                    <div class="text-danger">{{ form.user.errors }}</div>
-                {% endif %}
+                <!-- <label for="id_user">User:</label>
+                <input type="text" class="form-control" id="id_user" name="user" required> -->
             </div>
             <div class="form-group">
-                <label for="id_amount">Amount</label>
-                {{ form.amount }}
-                {% if form.amount.errors %}
-                    <div class="text-danger">{{ form.amount.errors }}</div>
-                {% endif %}
+                <label for="id_amount">Amount:</label>
+                <input type="number" class="form-control" id="id_amount" name="amount" required>
             </div>
             <div class="form-group">
-                <label for="id_description">Description</label>
-                {{ form.description }}
-                {% if form.description.errors %}
-                    <div class="text-danger">{{ form.description.errors }}</div>
-                {% endif %}
+                <label for="id_description">Description:</label>
+                <input type="text" class="form-control" id="id_description" name="description" required>
             </div>
             <button type="submit" class="btn btn-primary">Add Expense</button>
         </form>

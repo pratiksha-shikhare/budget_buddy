@@ -123,28 +123,38 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# settings.py
-
-# settings.py
-
 # Celery settings
 # CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
-CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_RESULT_BACKEND = 'rpc://'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
+# CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_RESULT_BACKEND = 'rpc://'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'
 
-# Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # or your email provider
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'pratikshashikhare4016@gmail.com'
-EMAIL_HOST_PASSWORD = '40164016p'
-DEFAULT_FROM_EMAIL = '4016pinki@gmail.com'
+# # Email settings
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com' 
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'pratikshashikhare4016@gmail.com'
+# EMAIL_HOST_PASSWORD = '40164016p'
+# DEFAULT_FROM_EMAIL = '4016pinki@gmail.com'
 
-# settings.py
+# # settings.py
 # LOGIN_URL = 'login'
-# AUTH_USER_MODEL = 'expenses.User'
+# # AUTH_USER_MODEL = 'expenses.User'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-sendgrid-username'
+# EMAIL_HOST_PASSWORD = 'your-sendgrid-api-key'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server address
+EMAIL_PORT = 587  # Replace with your SMTP server port number
+EMAIL_USE_TLS = True  # Set to True if your SMTP server requires TLS encryption
+EMAIL_HOST_USER = 'pratiksha9200@gmail.com'  # Replace with your SMTP username or email address
+EMAIL_HOST_PASSWORD = "ajct cpdw yfhy ckso"

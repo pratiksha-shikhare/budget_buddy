@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Buddy - Save Smartly</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+        }
+        .navbar {
+            background-color: #343a40;
+            padding: 1rem;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: #ffffff !important;
+            font-size: 1.1rem;
+        }
+        .hero {
+            background: url('https://source.unsplash.com/1600x900/?finance,savings') no-repeat center center;
+            background-size: cover;
+            height: 500px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+        }
+        .hero p {
+            font-size: 1.25rem;
+        }
+        .content-section {
+            padding: 60px 0;
+            background-color: #ffffff;
+        }
+        .content-box {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .content-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        .content-icon {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .content-section h2 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        .content-section p {
+            color: #6c757d;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Budget Buddy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">SignUp</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="hero">
+        <div>
+            <h1>Welcome to Budget Buddy</h1>
+            <p>Manage your finances effortlessly</p>
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg mt-4">Get Started</a>
+        </div>
+    </div>
+    <div class="content-section">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <div class="content-box">
+                        <div class="content-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <h2>Track Your Expenses</h2>
+                        <p>Keep an eye on where your money goes and make informed decisions.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="content-box">
+                        <div class="content-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h2>Set Saving Goals</h2>
+                        <p>Define your saving goals and achieve them with our smart saving tips.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="content-box">
+                        <div class="content-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h2>Analyze Your Spending</h2>
+                        <p>Get detailed reports on your spending habits and improve your financial health.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2024 Budget Buddy. All Rights Reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

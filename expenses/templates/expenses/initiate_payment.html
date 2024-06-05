@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<html>
+<!-- <!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Initiate Payment</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
         }
         .container {
-            max-width: 500px;
+            max-width: 900px;
             margin-top: 50px;
-            background-color: #ffffff;
             padding: 30px;
+            background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
@@ -22,103 +26,617 @@
             color: #007bff;
         }
         .btn-primary {
-            width: 100%;
+            background-color: #007bff;
+            border: none;
+            font-weight: bold;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .table {
+            margin-bottom: 20px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .lead {
+            font-size: 1.2rem;
+        }
+        .text-danger {
+            color: #dc3545;
+        }
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+        }
+        .marquee {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        #expenseChart {
+            max-width: 100%;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="form-title">Initiate Payment</h1>
+        <h1 class="form-title">Budget Buddy</h1>
+        <div class="marquee">
+            <marquee behavior="scroll" direction="left">Tip: Track your daily expenses to save more and stay within your budget!</marquee>
+        </div>
+        <h4 class="text-center mb-4">Initiate Payment</h4>
         <form method="post" action="{% url 'initiate_payment' %}">
             {% csrf_token %}
-            <p class="text-danger">{{error}}</p>
-            <!-- <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Today's Total Spending:</td>
+                        <td><b>₹ {{ total_spent_today }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Remaining Daily Target Savings:</td>
+                        <td><b>₹ {{ remain_daily_target_amt }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Daily Max Spending Amount:</td>
+                        <td><b>₹ {{ daily_max_spending_amt }}</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-danger">{{ error }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <label for="daily_limit">Enter your Daily max spending amount:</label>
+                <input type="number" class="form-control" id="daily_limit" name="daily_limit" value='1000' required>
             </div>
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div> -->
-            <div class="form-group">
-                <label for="number">Daily max spending amount:</label>
-                <input type="number" class="form-control" id="email" name="daily_limit" value='1000' required>
+                <label for="wemail">To Whom (UPI ID):</label>
+                <input type="email" class="form-control" id="wemail" name="wemail" required placeholder="example@oksbi">
             </div>
             <div class="form-group">
-                <label for="amount">Pay amount (Rup):</label>
-                <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+                <label for="desc">Description of payment:</label>
+                <input type="text" class="form-control" id="desc" name="desc" required>
+            </div>        
+            <div class="form-group">
+                <label for="amount">Pay amount (₹):</label>
+                <input type="number" class="form-control" id="amount" name="amount" step="0.01" placeholder="₹ 150" required>
             </div>
-            <button type="submit" class="btn btn-primary">Pay Now</button>
+            <button type="submit" class="btn btn-primary btn-block">Pay Now</button>
         </form>
     </div>
+
     <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h3>Your Common Monthly Expense</h3>
+        <div class="card">
+            <div class="card-header">
+                <h3>Your Common Monthly Expense</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for e in exp %}
-                          <p>{{e.description}} : {{e.amount}}</p>
+                        <tr>
+                            <td>{{ e.description }}</td>
+                            <td>{{ e.amount }}</td>
+                        </tr>
                         {% endfor %}
-                        <p><b>Total : {{total_monthly_exp}}</b></p>
-                    </div>
-                    <div class="card-body">
-                        <form method="post" action="{% url 'add_common_expense' %}">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" class="btn btn-info btn-block">Add New Expense</button>
-                        </form>
-                    </div>
-                </div>
+                        <tr>
+                            <td><b>Total</b></td>
+                            <td><b>₹{{ total_monthly_exp }}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form method="post" action="{% url 'add_common_expense' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-info btn-block">Add New Expense</button>
+                </form>
             </div>
         </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-success text-white">
-                        <h2>Usable Balance</h2>
-                    </div>
-                    <div class="card-body">
-                        <p class="lead">Your usable balance excluding common expenses is <strong>Rup :{{ usable_balance }}</strong></p>
-                    </div>
-                </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-success">
+                <h3 class="text-white">Usable Balance</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">Your Total Account balance is <strong>₹{{ total_acc_bal }}</strong></p>
+                <p class="lead">Your usable balance excluding common expenses is <strong>₹{{ usable_balance }}</strong></p>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h3>Expenses Distribution</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="expenseChart"></canvas>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const expenseChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [{% for e in exp %}'{{ e.description }}',{% endfor %}],
+                    datasets: [{
+                        label: 'Monthly Expenses',
+                        data: [{% for e in exp %}{{ e.amount }},{% endfor %}],
+                        backgroundColor: [
+                            '#007bff',
+                            '#28a745',
+                            '#dc3545',
+                            '#ffc107',
+                            '#17a2b8',
+                            '#6f42c1',
+                            '#e83e8c',
+                            '#fd7e14'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            });
+        });
+    </script>
 </body>
-</html>
+</html> -->
 
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Initiate Payment</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #007bff;
+
+        }
+
+        .btn-primary,
+        .btn-info,
+        .btn-success,
+        .btn-warning {
+            font-weight: bold;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-primary {
+            background-color: #2e8aeddc;
+            width: 30%;
+        }
+
+        .bg-primary {
+            background-color: #2e8aeddc;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .btn-info {
+            background-color: #1da9bfc6;
+            width: 30%;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-success {
+            background-color: #44db65d3;
+        }
+
+        .btn-warning:hover {
+            background-color: #d39e00;
+
+        }
+
+        .btn-warning {
+            background-color: #d39e00b3;
+            width: 30%;
+        }
+
+        .table {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+        }
+
+        .marquee {
+            background-color: #83b9f3;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        #expenseChart {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .bg-warning {
+            background-color: #e8d18cf9;
+        }
+        .messages {
+            padding: 10px;
+            text-align: center;
+            font-size: 25px;
+            width: 40%;
+            margin: auto;
+        }
+        .messages li {
+            list-style: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+    </style>
 </head>
+
 <body>
-    <h1>Initiate Payment</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email">
-        <label for="daily_limit">Daily Limit:</label>
-        <input type="number" name="daily_limit" id="daily_limit">
-        <label for="amount">Amount:</label>
-        <input type="number" name="amount" id="amount">
-        <button type="submit">Submit</button>
-    </form>
-    <h2>Add Common Expense</h2>
-    <form method="post" action="{% url 'add_common_expense' %}">
-        {% csrf_token %}
-        {{ common_expense_form.as_p }}
-        <button type="submit">Add Expense</button>
-    </form>
-    <h2>Usable Balance</h2>
-    <p>Your usable balance excluding common expenses is ${{ usable_balance }}</p>
+    <p>
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    </p>
+    <div class="container">
+        <h1 class="form-title">Budget Buddy</h1>
+        <div class="marquee">
+            <marquee behavior="scroll" direction="left">Tip: Track your daily expenses to save more and stay within your
+                budget!</marquee>
+        </div>
+        <h4 class="text-center mb-4">Initiate Payment</h4>
+        <form method="post" action="{% url 'initiate_payment' %}">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Today's Total Spending:</td>
+                        <td><b>₹ {{ total_spent_today }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Today You Are Saving:</td>
+                        <td><b>₹ {{ remain_daily_target_amt }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Daily Max Spending Amount:</td>
+                        <td><b>₹ {{ daily_max_spending_amt }}</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-danger">{{ error }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <label for="daily_limit">Enter your Daily max spending amount:</label>
+                <input type="number" class="form-control" id="daily_limit" name="daily_limit" value='1000' required>
+            </div>
+            <div class="form-group">
+                <label for="wemail">To Whom (UPI ID):</label>
+                <input type="email" class="form-control" id="wemail" name="wemail" required placeholder="example@oksbi">
+            </div>
+            <div class="form-group">
+                <label for="desc">Description of payment:</label>
+                <input type="text" class="form-control" id="desc" name="desc" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Pay amount (₹):</label>
+                <input type="number" class="form-control" id="amount" name="amount" step="0.01" placeholder="₹ 150"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Pay Now</button>
+        </form>
+
+        <!-- Cash Payment Button -->
+        <button class="btn btn-warning btn-block mt-4" data-toggle="modal" data-target="#cashPaymentModal">Cash
+            Payment</button>
+
+        <!-- Cash Payment Modal -->
+        <div class="modal fade" id="cashPaymentModal" tabindex="-1" role="dialog"
+            aria-labelledby="cashPaymentModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cashPaymentModalLabel">Cash Payment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'cash_payment' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="cash_amount">Amount (₹):</label>
+                                <input type="number" class="form-control" id="cash_amount" name="amount" step="0.01"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cash_description">Description:</label>
+                                <input type="text" class="form-control" id="cash_description" name="description"
+                                    required>
+                            </div>
+                            <button type="submit" class="btn btn-warning btn-block">Submit Cash Payment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>Your Common Monthly Expense</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in exp %}
+                        <tr>
+                            <td>{{ e.description }}</td>
+                            <td>{{ e.amount }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><b>Total</b></td>
+                            <td><b>₹{{ total_monthly_exp }}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form method="post" action="{% url 'add_common_expense' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-info btn-block">Add New Expense</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-success">
+                <h3 class="text-white">Usable Balance</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">Your Total Account balance is <strong>₹{{ total_acc_bal }}</strong></p>
+                <p class="lead">Your usable balance excluding common expenses is <strong>₹{{ usable_balance }}</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h3>Expenses Distribution</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Payment Summary</h2>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background-color: #0dcaf0;">
+                    <div class="card-body">
+                        <h5 class="card-title">Today's Online Spending</h5>
+                        <p class="card-text"><b>₹{{ today_online_spend }}</b></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background-color: #ffc107;">
+                    <div class="card-body">
+                        <h5 class="card-title">Today's Total Cash Spending</h5>
+                        <p class="card-text"><b>₹{{ today_cash_spend }}</b></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">Yesterday's Total Savings</h5>
+                        <p class="card-text"><b>₹{{ yesterdays_saving }}</b></p>
+                        <p>(Spending Limit : ₹{{yesterdays_max_target}})</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background-color: #dc3545;">
+                    <div class="card-body">
+                        <h5 class="card-title">Yesterday's Total Spending</h5>
+                        <p class="card-text"><b>₹{{ yesterday_spend_amt }}</b></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background-color: #198754;">
+                    <div class="card-body">
+                        <h5 class="card-title">Last Month's Total Savings</h5>
+                        <p class="card-text"><b>₹{{ last_month_saved_amt }}</b></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card text-white" style="background-color: #d3448ce2;">
+                    <div class="card-body">
+                        <h5 class="card-title">Last Month's Total Spending</h5>
+                        <p class="card-text"><b>₹{{ last_month_spend_amt }}</b></p>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <!-- <div class="text-center mt-4">
+            <a href="{% url 'cash_payment' %}" class="btn btn-primary">Make Another Payment</a>
+        </div> -->
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const expenseChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [{% for e in exp %}'{{ e.description }}',{% endfor %}],
+            datasets: [{
+                label: 'Monthly Expenses',
+                data: [{% for e in exp %}{{ e.amount }}, {% endfor %}],
+            backgroundColor: [
+            '#007bff',
+            '#28a745',
+            '#dc3545',
+            '#ffc107',
+            '#17a2b8',
+            '#6f42c1',
+            '#e83e8c',
+            '#fd7e14'
+        ],
+            borderColor: '#ffffff',
+            borderWidth: 1
+                    }]
+                },
+            options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                position: 'bottom'
+            }
+        }
+            });
+        });
+    </script>
 </body>
-</html> -->
+
+</html>
