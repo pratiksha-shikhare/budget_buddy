@@ -302,6 +302,13 @@
             background-color: #d39e00b3;
             width: 30%;
         }
+        .btn-suc {
+            padding: 5px;
+            background-color:  #44db65d3;
+            width: 30%;
+            font-weight: bold;
+            
+        }
 
         .table {
             margin-bottom: 20px;
@@ -441,7 +448,7 @@
         </form>
 
         <!-- Cash Payment Button -->
-        <button class="btn btn-warning btn-block mt-4" data-toggle="modal" data-target="#cashPaymentModal">Cash
+        <button class="btn btn-suc btn-block mt-4" data-toggle="modal" data-target="#cashPaymentModal">Cash
             Payment</button>
 
         <!-- Cash Payment Modal -->
@@ -511,7 +518,7 @@
         </div>
 
         <div class="card mt-4">
-            <div class="card-header bg-success">
+            <div class="card-header bg-primary">
                 <h3 class="text-white">Usable Balance</h3>
             </div>
             <div class="card-body">
@@ -538,7 +545,8 @@
         <div class="row">
 
             <div class="col-md-4 mb-3">
-                <div class="card text-white" style="background-color: #0dcaf0;">
+                <div class="card text-white" style="background-color: #1da9bfc6">
+                <!-- <div class="card text-white bg-dark"> -->
                     <div class="card-body">
                         <h5 class="card-title">Today's Online Spending</h5>
                         <p class="card-text"><b>₹{{ today_online_spend }}</b></p>
@@ -547,7 +555,8 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <div class="card text-white" style="background-color: #ffc107;">
+                <div class="card text-white" style="background-color: #1da9bfc6;">
+                <!-- <div class="card text-white bg-dark"> -->
                     <div class="card-body">
                         <h5 class="card-title">Today's Total Cash Spending</h5>
                         <p class="card-text"><b>₹{{ today_cash_spend }}</b></p>
@@ -556,16 +565,17 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <div class="card text-white bg-dark">
+                <div class="card text-white" style="background-color: #1da9bfc6;">
                     <div class="card-body">
                         <h5 class="card-title">Yesterday's Total Savings</h5>
                         <p class="card-text"><b>₹{{ yesterdays_saving }}</b></p>
-                        <p>(Spending Limit : ₹{{yesterdays_max_target}})</p>
+                        <!-- <p>(Spending Limit : ₹{{yesterdays_max_target}})</p> -->
                     </div>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="card text-white" style="background-color: #dc3545;">
+                <div class="card text-white" style="background-color: #1da9bfc6;">
+                <!-- <div class="card text-white bg-dark"> -->
                     <div class="card-body">
                         <h5 class="card-title">Yesterday's Total Spending</h5>
                         <p class="card-text"><b>₹{{ yesterday_spend_amt }}</b></p>
@@ -573,7 +583,8 @@
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="card text-white" style="background-color: #198754;">
+                <div class="card text-white" style="background-color: #1da9bfc6;">
+                <!-- <div class="card text-white bg-dark"> -->
                     <div class="card-body">
                         <h5 class="card-title">Last Month's Total Savings</h5>
                         <p class="card-text"><b>₹{{ last_month_saved_amt }}</b></p>
@@ -582,7 +593,8 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <div class="card text-white" style="background-color: #d3448ce2;">
+                <div class="card text-white" style="background-color: #1da9bfc6;">
+                <!-- <div class="card text-white bg-dark"> -->
                     <div class="card-body">
                         <h5 class="card-title">Last Month's Total Spending</h5>
                         <p class="card-text"><b>₹{{ last_month_spend_amt }}</b></p>
@@ -614,14 +626,14 @@
                 label: 'Monthly Expenses',
                 data: [{% for e in exp %}{{ e.amount }}, {% endfor %}],
             backgroundColor: [
-            '#007bff',
-            '#28a745',
-            '#dc3545',
-            '#ffc107',
+            '#edabdb',
             '#17a2b8',
             '#6f42c1',
             '#e83e8c',
-            '#fd7e14'
+            '#fd7e14',
+            '#007bff',
+            '#28a745',
+            '#dc3545',
         ],
             borderColor: '#ffffff',
             borderWidth: 1
